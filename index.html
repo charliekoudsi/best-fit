@@ -8,45 +8,69 @@
   <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/128/138/138345.png">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+  <link rel="stylesheet" href="public/stylesheets/main.css">
 </head>
 
 <body>
-  <div class="container" style="border: solid black 1px;">
-    <h1 style="text-align: center;">Best Fit Line Calculator</h1>
+  <div class="container">
+    <h1>Best Fit Line Calculator</h1>
     <div class="row">
-      <div class="col-6" style="border: solid black 1px;">
-        <div class="row">
-          <form class = "form col-12">
-            <div class="form-row" style = "padding-left: 0;">
-              <label class = "col-2 col-form-label" style = "font-size: 14px;">Data Point 1</label>
-              <div class="col-5">
-                <label class="sr-only" for="inlineFormInputName">Name</label>
-                <input type="text" class="form-control mb-2 mb-sm-0" id="inlineFormInputName" placeholder="Jane Doe" style = "font-size: 14px;">
-              </div>
-              <div class="col-5">
-                <label class="sr-only" for="inlineFormInputGroupUsername">Username</label>
-                <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username" style = "font-size: 14px;">
-              </div>
+      <div class="col-6">
+        <form class="form col-12" action="index.html" method="post">
+          <div class="form-row">
+            <div class="col-4">
+              <label class="col-form-label">Data Point 1:</label>
             </div>
-          </form>
+            <div class="col-4">
+              <label class="sr-only" for="x1">x-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="x1" placeholder="x-value">
+            </div>
+            <div class="col-4">
+              <label class="sr-only" for="y1">y-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="y1" placeholder="y-value">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-4">
+              <label class="col-form-label">Data Point 2:</label>
+            </div>
+            <div class="col-4">
+              <label class="sr-only" for="x2">x-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="x2" placeholder="x-value">
+            </div>
+            <div class="col-4">
+              <label class="sr-only" for="y2">y-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="y2" placeholder="y-value">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-4">
+              <label class="col-form-label">Data Point 3:</label>
+            </div>
+            <div class="col-4">
+              <label class="sr-only" for="x3">x-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="x3" placeholder="x-value">
+            </div>
+            <div class="col-4">
+              <label class="sr-only" for="y3">y-value</label>
+              <input type="text" class="form-control mb-2 mb-sm-0" id="y3" placeholder="y-value">
+            </div>
+          </div>
+        </form>
+        <div class="row" style="border: solid black 1px;">
+          <button class="btn btn-primary">Add Data Point</button>
         </div>
       </div>
       <div class="col-6">
-        <canvas id="myChart" width="500" height="100"></canvas>
+        <canvas id="myChart" width="500" height="400"></canvas>
       </div>
     </div>
   </div>
 </body>
 
-<script>
-  src = "https://code.jquery.com/jquery-3.2.1.slim.min.js"
-</script>
-<script>
-  src = "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-</script>
-<script>
-  src = "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
-</script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 <script>
   var ctx = document.getElementById("myChart").getContext('2d');
   var myChart = new Chart(ctx, {
@@ -86,5 +110,6 @@
     }
   });
 </script>
+<script type="text/javascript" src="public/scripts/app.js"></script>
 
 </html>
