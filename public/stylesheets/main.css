@@ -2,12 +2,14 @@ div.container {
   border: solid black 1px;
 }
 
-div.container div.row div.col-6 {
+/*div.container div.row div.col-6 {
   border: solid black 1px;
-}
+}*/
 
-h1 {
+.container h1 {
   text-align: center;
+  margin-top: 20px;
+  color: red;
 }
 
 label.col-form-label {
@@ -17,4 +19,11 @@ label.col-form-label {
 
 input.form-control.mb-2.mb-sm-0 {
   font-size: 14px;
+}
+
+.col-md-6 button{
+  width: 200px;
+  margin: auto;
+  margin-top: 20px;
+  display: block;
 }
