@@ -1,17 +1,18 @@
 var ctx = document.getElementById("myChart").getContext('2d');
+var plotted = 0;
 var xLabel = {
   display: true,
   labelString: "x-axis",
   fontColor: "red",
   fontFamily: "system-ui",
-  fontSize: 14
+  fontSize: 16
 };
 var yLabel = {
   display: true,
   labelString: "y-axis",
   fontColor: "red",
   fontFamily: "system-ui",
-  fontSize: 14
+  fontSize: 16
 }
 
 function getMin(list, axis) {
@@ -68,13 +69,6 @@ var myChart = new Chart(ctx, {
           max: 10,
           min: -10,
           stepSize: 1,
-          callback: function(value, index, values) {
-            if (value % 1 === 0) {
-              return value;
-            } else {
-              return;
-            }
-          }
         },
         scaleLabel: yLabel
       }]
@@ -132,6 +126,13 @@ function calcDeviation(list) {
 }
 
 $("button.btn-success").click(function() {
+  if (plotted === 1) {
+    myChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    myChart.update();
+  }
+  plotted = 1;
   var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
   var dataPoints = [];
   for (var i = 1; i <= numDataPoints; i++) {
@@ -141,136 +142,111 @@ $("button.btn-success").click(function() {
     }
     dataPoints.push(point);
   }
-  var xMax = getMax(dataPoints, "x");
-  var xMin = getMin(dataPoints, "x");
-  var yMax = getMax(dataPoints, "y");
-  var yMin = getMin(dataPoints, "y");
-  var deviations = calcDeviation(dataPoints);
-  var data = {
-    datasets: [{
-      label: 'Data',
-      backgroundColor: "black",
-      pointBackgroundColor: "black",
-      showLine: false,
-      showXLabels: 5,
-      fill: false,
-      data: dataPoints,
-      borderColor: "black",
-    }]
-  };
-  myChart = new Chart(ctx, {
-    type: "scatter",
-    options: {
-      scales: {
-        xAxes: [{
-          type: 'linear',
-          position: 'bottom',
-          ticks: {
-            max: xMax + deviations[0],
-            min: xMin - deviations[0],
-            stepSize: 1,
-          },
-          scaleLabel: xLabel
-        }],
-        yAxes: [{
-          type: 'linear',
-          ticks: {
-            max: yMax + deviations[1],
-            min: yMin - deviations[1],
-            stepSize: 1,
-            callback: function(value, index, values) {
-              if (value % 1 === 0) {
-                return value;
-              } else {
-                return;
-              }
-            }
-          },
-          scaleLabel: yLabel
-        }]
-      }
-    },
-    data: data
-  })
-});
-
-$("button.btn-danger").click(function() {
-  var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
-  var dataPoints = [];
-  for (var i = 1; i <= numDataPoints; i++) {
-    var point = {
-      x: parseFloat($("#x" + i).val()),
-      y: parseFloat($("#y" + i).val())
-    }
-    dataPoints.push(point);
-  }
-  var line = calcLine(dataPoints);
-  console.log(line);
-
-  console.log(bestFitData);
   var deviations = calcDeviation(dataPoints);
   var xMax = getMax(dataPoints, "x") + deviations[0];
-  console.log(xMax);
   var xMin = getMin(dataPoints, "x") - deviations[0];
   var yMax = getMax(dataPoints, "y") + deviations[1];
   var yMin = getMin(dataPoints, "y") - deviations[1];
-  var bestFitData = [
-    {
-      x: xMin,
-      y: xMin * line[0] + line[1]
-    },
-    {
-      x: xMax,
-      y: xMax * line[0] + line[1]
-    }
-  ]
+  console.log(yMax);
+  console.log(yMin);
   var data = {
     datasets: [{
       label: 'Data',
       backgroundColor: "black",
       pointBackgroundColor: "black",
       showLine: false,
-      showXLabels: 5,
       fill: false,
       data: dataPoints,
       borderColor: "black",
-    }, {
-      label: "Best Fit Line",
-      backgroundColor: "red",
-      pointBackgroundColor: "red",
-      borderColor: "red",
-      showLine: true,
-      fill: false,
-      data: bestFitData
     }]
   };
-  myChart = new Chart(ctx, {
-    type: "scatter",
-    options: {
-      scales: {
-        xAxes: [{
-          type: 'linear',
-          position: 'bottom',
-          ticks: {
-            max: xMax,
-            min: xMin,
-            stepSize: xMax / 10,
-          },
-          scaleLabel: xLabel
-        }],
-        yAxes: [{
-          type: 'linear',
-          ticks: {
-            max: yMax,
-            min: yMin,
-            stepSize: yMax / 10,
-          },
-          scaleLabel: yLabel
-        }]
+  myChart.config.data = data;
+  myChart.config.options.scales.xAxes[0].ticks.max = xMax;
+  myChart.config.options.scales.xAxes[0].ticks.min = xMin;
+  myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+  myChart.config.options.scales.yAxes[0].ticks.max = yMax;
+  myChart.config.options.scales.yAxes[0].ticks.min = yMin;
+  myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+  myChart.update();
+});
+
+$("button.btn-danger").click(function() {
+  if (plotted === 0) {
+    alert("You must first plot the data")
+  } else {
+    myChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    myChart.update();
+    var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
+    var dataPoints = [];
+    for (var i = 1; i <= numDataPoints; i++) {
+      var point = {
+        x: parseFloat($("#x" + i).val()),
+        y: parseFloat($("#y" + i).val())
       }
-    },
-    data: data
-  })
+      dataPoints.push(point);
+    }
+    var line = calcLine(dataPoints);
+    var deviations = calcDeviation(dataPoints);
+    var xMax = getMax(dataPoints, "x") + deviations[0];
+    var xMin = getMin(dataPoints, "x") - deviations[0];
+    var yMax = getMax(dataPoints, "y") + deviations[1];
+    var yMin = getMin(dataPoints, "y") - deviations[1];
+    var r = calcCorr(dataPoints);
+    var operation = "+";
+    if (line[1] < 0) {
+      operation = "-";
+    }
+    var bestFitData = [{
+        x: xMin,
+        y: xMin * line[0] + line[1]
+      },
+      {
+        x: xMax,
+        y: xMax * line[0] + line[1]
+      }
+    ]
+    var data = {
+      datasets : [
+        {
+          label: "Data",
+          backgroundColor: "black",
+          pointBackgroundColor: "black",
+          borderColor: "black",
+          showLine: false,
+          fill: false,
+          data: dataPoints
+        },
+        {
+        label: "Best Fit Line",
+        backgroundColor: "red",
+        pointBackgroundColor: "red",
+        pointRadius: 0,
+        borderColor: "red",
+        showLine: true,
+        fill: false,
+        data: bestFitData
+      }]
+    };
+    myChart.config.data = data;
+    myChart.config.options.scales.xAxes[0].ticks.max = xMax;
+    myChart.config.options.scales.xAxes[0].ticks.min = xMin;
+    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+    myChart.config.options.scales.yAxes[0].ticks.max = yMax;
+    myChart.config.options.scales.yAxes[0].ticks.min = yMin;
+    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+    myChart.update();
+    $(".col-12 h4").text("Unlinearized Best Fit Line");
+    $("#bestFitLabel").text("Best Fit Equation:");
+    if (line[1] !== 0) {
+      $("#bestFitEquation").text("y = " + line[0]+ "x " + operation +  " "+  Math.abs(line[1]));
+    } else {
+      $("#bestFitEquation").text("y = " + line[0]+ "x");
+    }
+    $("#rLabel").text("Correlation (r):");
+    $("#rValue").text("r = "+ r);
+  }
 })
 
 function calcCorr(list) {

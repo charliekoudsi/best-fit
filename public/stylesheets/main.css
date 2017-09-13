@@ -1,15 +1,16 @@
-div.container {
-  border: solid black 1px;
+body {
+  background-color: rgba(0, 0, 0, 0.05);
 }
-
-/*div.container div.row div.col-6 {
-  border: solid black 1px;
-}*/
 
 .container h1 {
   text-align: center;
   margin-top: 20px;
   color: red;
+  margin-bottom: 0px;
+}
+
+h3 {
+  text-align: center;
 }
 
 label.col-form-label {
@@ -26,4 +27,23 @@ input.form-control.mb-2.mb-sm-0 {
   margin: auto;
   margin-top: 20px;
   display: block;
+}
+
+button.btn-danger {
+  background-color: red;
+}
+
+.equation {
+  margin-top: 20px;
+}
+
+.equations {
+  font-size: 14px;
+}
+
+h4 {
+  text-align: center;
+  text-decoration: none;
+  font-weight: 400;
+  margin-top: 20px;
 }
