@@ -30,14 +30,16 @@ var l = [{
     y: 1
   },
   {
-    x: 2,
+    x: 4,
     y: 2,
   },
   {
-    x: 3,
-    y: 4
+    x: 9,
+    y: 3
   }
 ]
+
+l = root(l);
 
 function getMax(list, axis) {
   var max = list[0][axis];
@@ -249,6 +251,88 @@ $("button.btn-danger").click(function() {
   }
 })
 
+$("button.btn-warning").click(function() {
+  if (plotted === 0) {
+    alert("You must first plot the data")
+  } else {
+    myChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    myChart.update();
+    var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
+    var dataPoints = [];
+    for (var i = 1; i <= numDataPoints; i++) {
+      var point = {
+        x: parseFloat($("#x" + i).val()),
+        y: parseFloat($("#y" + i).val())
+      }
+      dataPoints.push(point);
+    }
+    var linearized = linearize(dataPoints);
+    var printed = linearized[1];
+    linearized = linearized[0];
+    var line = calcLine(linearized);
+    var deviations = calcDeviation(linearized);
+    var xMax = getMax(linearized, "x") + deviations[0];
+    var xMin = getMin(linearized, "x") - deviations[0];
+    var yMax = getMax(linearized, "y") + deviations[1];
+    var yMin = getMin(linearized, "y") - deviations[1];
+    var r = calcCorr(linearized);
+    var operation = "+";
+    if (line[1] < 0) {
+      operation = "-";
+    }
+    var bestFitData = [{
+        x: xMin,
+        y: xMin * line[0] + line[1]
+      },
+      {
+        x: xMax,
+        y: xMax * line[0] + line[1]
+      }
+    ]
+    var data = {
+      datasets : [
+        {
+          label: "Linearized Data",
+          backgroundColor: "black",
+          pointBackgroundColor: "black",
+          borderColor: "black",
+          showLine: false,
+          fill: false,
+          data: linearized
+        },
+        {
+        label: "Linearized Best Fit",
+        backgroundColor: "red",
+        pointBackgroundColor: "red",
+        pointRadius: 0,
+        borderColor: "red",
+        showLine: true,
+        fill: false,
+        data: bestFitData
+      }]
+    };
+    myChart.config.data = data;
+    myChart.config.options.scales.xAxes[0].ticks.max = xMax;
+    myChart.config.options.scales.xAxes[0].ticks.min = xMin;
+    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+    myChart.config.options.scales.yAxes[0].ticks.max = yMax;
+    myChart.config.options.scales.yAxes[0].ticks.min = yMin;
+    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+    myChart.update();
+    $(".col-12 h4").text("Linearized Best Fit Line");
+    $("#bestFitLabel").text("Best Fit Equation:");
+    if (line[1] !== 0) {
+      $("#bestFitEquation").text("y = " + line[0]+ printed + " " + operation +  " "+  Math.abs(line[1]));
+    } else {
+      $("#bestFitEquation").text("y = " + line[0]+ "printed");
+    }
+    $("#rLabel").text("Correlation (r):");
+    $("#rValue").text("r = "+ r);
+  }
+})
+
 function calcCorr(list) {
   var averages = calcMean(list);
   var deviations = calcDeviation(list);
@@ -303,15 +387,20 @@ function linearize(list) {
   var invR = calcCorr(inversed);
   var rtR = calcCorr(rooted);
   var counter = findMax(sqR, invR, rtR);
+  var printed = "";
   if (counter === 0) {
     list = squared;
+    printed = "x<sup>2</sup>";
+    console.log("a");
   } else if (counter === 1) {
-    console.log();
     list = inversed;
+    printed = "<sup>1</sup>&frasl;<sub>x</sub>";
+    console.log("b");
   } else {
     list = rooted;
+    printed = "&#8730;x";
+    console.log("b");
   }
-  console.log(list);
   return list;
 }
 

@@ -33,6 +33,16 @@ button.btn-danger {
   background-color: red;
 }
 
+
+button.btn-warning {
+  background-color: orange;
+  color: white;
+}
+
+button.btn:hover {
+  color: black;
+}
+
 .equation {
   margin-top: 20px;
 }
