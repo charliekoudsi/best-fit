@@ -39,7 +39,8 @@ var l = [{
   }
 ]
 
-l = root(l);
+l = inverse(l);
+console.log(calcCorr(l));
 
 function getMax(list, axis) {
   var max = list[0][axis];
@@ -130,7 +131,7 @@ function calcDeviation(list) {
 $("button.btn-success").click(function() {
   if (plotted === 1) {
     myChart.data.datasets.forEach((dataset) => {
-        dataset.data.pop();
+      dataset.data.pop();
     });
     myChart.update();
   }
@@ -165,10 +166,10 @@ $("button.btn-success").click(function() {
   myChart.config.data = data;
   myChart.config.options.scales.xAxes[0].ticks.max = xMax;
   myChart.config.options.scales.xAxes[0].ticks.min = xMin;
-  myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+  myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin) / 10;
   myChart.config.options.scales.yAxes[0].ticks.max = yMax;
   myChart.config.options.scales.yAxes[0].ticks.min = yMin;
-  myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+  myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin) / 10;
   myChart.update();
 });
 
@@ -177,7 +178,7 @@ $("button.btn-danger").click(function() {
     alert("You must first plot the data")
   } else {
     myChart.data.datasets.forEach((dataset) => {
-        dataset.data.pop();
+      dataset.data.pop();
     });
     myChart.update();
     var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
@@ -210,8 +211,7 @@ $("button.btn-danger").click(function() {
       }
     ]
     var data = {
-      datasets : [
-        {
+      datasets: [{
           label: "Data",
           backgroundColor: "black",
           pointBackgroundColor: "black",
@@ -221,33 +221,34 @@ $("button.btn-danger").click(function() {
           data: dataPoints
         },
         {
-        label: "Best Fit Line",
-        backgroundColor: "red",
-        pointBackgroundColor: "red",
-        pointRadius: 0,
-        borderColor: "red",
-        showLine: true,
-        fill: false,
-        data: bestFitData
-      }]
+          label: "Best Fit Line",
+          backgroundColor: "red",
+          pointBackgroundColor: "red",
+          pointRadius: 0,
+          borderColor: "red",
+          showLine: true,
+          fill: false,
+          data: bestFitData
+        }
+      ]
     };
     myChart.config.data = data;
     myChart.config.options.scales.xAxes[0].ticks.max = xMax;
     myChart.config.options.scales.xAxes[0].ticks.min = xMin;
-    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin) / 10;
     myChart.config.options.scales.yAxes[0].ticks.max = yMax;
     myChart.config.options.scales.yAxes[0].ticks.min = yMin;
-    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin) / 10;
     myChart.update();
     $(".col-12 h4").text("Unlinearized Best Fit Line");
     $("#bestFitLabel").text("Best Fit Equation:");
     if (line[1] !== 0) {
-      $("#bestFitEquation").text("y = " + line[0]+ "x " + operation +  " "+  Math.abs(line[1]));
+      $("#bestFitEquation").text("y = " + line[0] + "x " + operation + " " + Math.abs(line[1]));
     } else {
-      $("#bestFitEquation").text("y = " + line[0]+ "x");
+      $("#bestFitEquation").text("y = " + line[0] + "x");
     }
     $("#rLabel").text("Correlation (r):");
-    $("#rValue").text("r = "+ r);
+    $("#rValue").text("r = " + r);
   }
 })
 
@@ -256,7 +257,7 @@ $("button.btn-warning").click(function() {
     alert("You must first plot the data")
   } else {
     myChart.data.datasets.forEach((dataset) => {
-        dataset.data.pop();
+      dataset.data.pop();
     });
     myChart.update();
     var numDataPoints = $(".form-row .col-4:nth-child(2) input").length;
@@ -292,8 +293,7 @@ $("button.btn-warning").click(function() {
       }
     ]
     var data = {
-      datasets : [
-        {
+      datasets: [{
           label: "Linearized Data",
           backgroundColor: "black",
           pointBackgroundColor: "black",
@@ -303,33 +303,34 @@ $("button.btn-warning").click(function() {
           data: linearized
         },
         {
-        label: "Linearized Best Fit",
-        backgroundColor: "red",
-        pointBackgroundColor: "red",
-        pointRadius: 0,
-        borderColor: "red",
-        showLine: true,
-        fill: false,
-        data: bestFitData
-      }]
+          label: "Linearized Best Fit",
+          backgroundColor: "red",
+          pointBackgroundColor: "red",
+          pointRadius: 0,
+          borderColor: "red",
+          showLine: true,
+          fill: false,
+          data: bestFitData
+        }
+      ]
     };
     myChart.config.data = data;
     myChart.config.options.scales.xAxes[0].ticks.max = xMax;
     myChart.config.options.scales.xAxes[0].ticks.min = xMin;
-    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin)/10;
+    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin) / 10;
     myChart.config.options.scales.yAxes[0].ticks.max = yMax;
     myChart.config.options.scales.yAxes[0].ticks.min = yMin;
-    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin)/10;
+    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin) / 10;
     myChart.update();
     $(".col-12 h4").text("Linearized Best Fit Line");
     $("#bestFitLabel").text("Best Fit Equation:");
     if (line[1] !== 0) {
-      $("#bestFitEquation").text("y = " + line[0]+ printed + " " + operation +  " "+  Math.abs(line[1]));
+      $("#bestFitEquation").text("y = " + line[0] + printed + " " + operation + " " + Math.abs(line[1]));
     } else {
-      $("#bestFitEquation").text("y = " + line[0]+ "printed");
+      $("#bestFitEquation").text("y = " + line[0] + "printed");
     }
     $("#rLabel").text("Correlation (r):");
-    $("#rValue").text("r = "+ r);
+    $("#rValue").text("r = " + r);
   }
 })
 
@@ -354,7 +355,10 @@ function calcCorr(list) {
 function square(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
-    linearized.push([list[i].x * list[i].x, list[i].y]);
+    linearized.push([{
+      x: list[i].x * list[i].x,
+      y: list[i].y
+    }]);
   }
   return linearized;
 }
@@ -363,9 +367,15 @@ function inverse(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
     if (list[i][0] == 0) {
-      linearized.push([0, list[i].y]);
+      linearized.push([{
+        x: 0,
+        y: list[i].y
+      }]);
     } else {
-      linearized.push([1 / list[i].x, list[i].y]);
+      linearized.push([{
+        x: 1 / list[i].x,
+        y: list[i].y
+      }]);
     }
   }
   return linearized;
@@ -374,7 +384,10 @@ function inverse(list) {
 function root(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
-    linearized.push([Math.sqrt(list[i].x), list[i].y]);
+    linearized.push([{
+      x: Math.sqrt(list[i].x),
+      y: list[i].y
+    }]);
   }
   return linearized;
 }
