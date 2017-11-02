@@ -41,6 +41,7 @@ button.btn-warning {
 
 button.btn:hover {
   color: black;
+  cursor: pointer;
 }
 
 .equation {

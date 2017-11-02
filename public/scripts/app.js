@@ -39,8 +39,6 @@ var l = [{
   }
 ]
 
-l = inverse(l);
-console.log(calcCorr(l));
 
 function getMax(list, axis) {
   var max = list[0][axis];
@@ -103,8 +101,8 @@ function calcMean(list) {
   var xTotal = 0;
   var yTotal = 0;
   for (var i = 0; i < list.length; i++) {
-    xTotal += list[i].x;
-    yTotal += list[i].y;
+    xTotal += list[i]["x"];
+    yTotal += list[i]["y"];
   }
   var xBar = xTotal / list.length;
   var yBar = yTotal / list.length;
@@ -118,8 +116,8 @@ function calcDeviation(list) {
   var xDiff = 0;
   var yDiff = 0;
   for (var i = 0; i < list.length; i++) {
-    xDiff += (list[i].x - averages[0]) * (list[i].x - averages[0]);
-    yDiff += (list[i].y - averages[1]) * (list[i].y - averages[1]);
+    xDiff += (list[i]["x"] - averages[0]) * (list[i]["x"] - averages[0]);
+    yDiff += (list[i]["y"] - averages[1]) * (list[i]["y"] - averages[1]);
   }
   sx = xDiff / (list.length - 1);
   sy = yDiff / (list.length - 1);
@@ -150,8 +148,6 @@ $("button.btn-success").click(function() {
   var xMin = getMin(dataPoints, "x") - deviations[0];
   var yMax = getMax(dataPoints, "y") + deviations[1];
   var yMin = getMin(dataPoints, "y") - deviations[1];
-  console.log(yMax);
-  console.log(yMin);
   var data = {
     datasets: [{
       label: 'Data',
@@ -270,7 +266,7 @@ $("button.btn-warning").click(function() {
       dataPoints.push(point);
     }
     var linearized = linearize(dataPoints);
-    var printed = linearized[1];
+    printed = linearized[1];
     linearized = linearized[0];
     var line = calcLine(linearized);
     var deviations = calcDeviation(linearized);
@@ -325,9 +321,9 @@ $("button.btn-warning").click(function() {
     $(".col-12 h4").text("Linearized Best Fit Line");
     $("#bestFitLabel").text("Best Fit Equation:");
     if (line[1] !== 0) {
-      $("#bestFitEquation").text("y = " + line[0] + printed + " " + operation + " " + Math.abs(line[1]));
+      $("#bestFitEquation").html("y = " + line[0] + printed + " " + operation + " " + Math.abs(line[1]));
     } else {
-      $("#bestFitEquation").text("y = " + line[0] + "printed");
+      $("#bestFitEquation").html("y = " + line[0] + printed);
     }
     $("#rLabel").text("Correlation (r):");
     $("#rValue").text("r = " + r);
@@ -340,9 +336,9 @@ function calcCorr(list) {
   var zx = [];
   var zy = [];
   for (var i = 0; i < list.length; i++) {
-    var zxi = (list[i].x - averages[0]) / deviations[0];
+    var zxi = (list[i]["x"] - averages[0]) / deviations[0];
     zx.push(zxi);
-    var zyi = (list[i].y - averages[1]) / deviations[1];
+    var zyi = (list[i]["y"] - averages[1]) / deviations[1];
     zy.push(zyi);
   }
   var zxzy = 0;
@@ -355,10 +351,10 @@ function calcCorr(list) {
 function square(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
-    linearized.push([{
-      x: list[i].x * list[i].x,
-      y: list[i].y
-    }]);
+    linearized.push({
+      x: list[i]["x"] * list[i]["x"],
+      y: list[i]["y"]
+    });
   }
   return linearized;
 }
@@ -367,15 +363,15 @@ function inverse(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
     if (list[i][0] == 0) {
-      linearized.push([{
+      linearized.push({
         x: 0,
         y: list[i].y
-      }]);
+      });
     } else {
-      linearized.push([{
+      linearized.push({
         x: 1 / list[i].x,
         y: list[i].y
-      }]);
+      });
     }
   }
   return linearized;
@@ -384,10 +380,10 @@ function inverse(list) {
 function root(list) {
   var linearized = [];
   for (var i = 0; i < list.length; i++) {
-    linearized.push([{
+    linearized.push({
       x: Math.sqrt(list[i].x),
       y: list[i].y
-    }]);
+    });
   }
   return linearized;
 }
@@ -404,17 +400,15 @@ function linearize(list) {
   if (counter === 0) {
     list = squared;
     printed = "x<sup>2</sup>";
-    console.log("a");
   } else if (counter === 1) {
     list = inversed;
     printed = "<sup>1</sup>&frasl;<sub>x</sub>";
-    console.log("b");
   } else {
     list = rooted;
     printed = "&#8730;x";
-    console.log("b");
   }
-  return list;
+  console.log(list);
+  return [list,printed];
 }
 
 function findMax(a, b, c) {
