@@ -127,6 +127,7 @@ function calcDeviation(list) {
 }
 
 $("button.btn-success").click(function() {
+  var alerted = false;
   if (plotted === 1) {
     myChart.data.datasets.forEach((dataset) => {
       dataset.data.pop();
@@ -141,32 +142,44 @@ $("button.btn-success").click(function() {
       x: parseFloat($("#x" + i).val()),
       y: parseFloat($("#y" + i).val())
     }
-    dataPoints.push(point);
+    if (isNaN(point.x) && !isNaN(point.y)) {
+      alert("Missing x-value for Data Point " + i);
+      alerted = true;
+    }
+    if (!isNaN(point.x) && !isNaN(point.y)) {
+        dataPoints.push(point);
+    }
   }
-  var deviations = calcDeviation(dataPoints);
-  var xMax = getMax(dataPoints, "x") + deviations[0];
-  var xMin = getMin(dataPoints, "x") - deviations[0];
-  var yMax = getMax(dataPoints, "y") + deviations[1];
-  var yMin = getMin(dataPoints, "y") - deviations[1];
-  var data = {
-    datasets: [{
-      label: 'Data',
-      backgroundColor: "black",
-      pointBackgroundColor: "black",
-      showLine: false,
-      fill: false,
-      data: dataPoints,
-      borderColor: "black",
-    }]
-  };
-  myChart.config.data = data;
-  myChart.config.options.scales.xAxes[0].ticks.max = xMax;
-  myChart.config.options.scales.xAxes[0].ticks.min = xMin;
-  myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin) / 10;
-  myChart.config.options.scales.yAxes[0].ticks.max = yMax;
-  myChart.config.options.scales.yAxes[0].ticks.min = yMin;
-  myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin) / 10;
-  myChart.update();
+  if (dataPoints.length < 3) {
+    alert("You must provide at least 3 data points");
+    alerted = true;
+  }
+  if (alerted === false) {
+    var deviations = calcDeviation(dataPoints);
+    var xMax = getMax(dataPoints, "x") + deviations[0];
+    var xMin = getMin(dataPoints, "x") - deviations[0];
+    var yMax = getMax(dataPoints, "y") + deviations[1];
+    var yMin = getMin(dataPoints, "y") - deviations[1];
+    var data = {
+      datasets: [{
+        label: 'Data',
+        backgroundColor: "black",
+        pointBackgroundColor: "black",
+        showLine: false,
+        fill: false,
+        data: dataPoints,
+        borderColor: "black",
+      }]
+    };
+    myChart.config.data = data;
+    myChart.config.options.scales.xAxes[0].ticks.max = xMax;
+    myChart.config.options.scales.xAxes[0].ticks.min = xMin;
+    myChart.config.options.scales.xAxes[0].ticks.stepSize = (xMax - xMin) / 10;
+    myChart.config.options.scales.yAxes[0].ticks.max = yMax;
+    myChart.config.options.scales.yAxes[0].ticks.min = yMin;
+    myChart.config.options.scales.yAxes[0].ticks.stepSize = (yMax - yMin) / 10;
+    myChart.update();
+  }
 });
 
 $("button.btn-danger").click(function() {
